@@ -1,9 +1,11 @@
 console.log("hello world");
 
 let score = 0;
-let gameTime = 8;
+let gameTime = 20;
+let startCounter = 4;
 let gameState = 0; //0 press start to play, 1 press restart first then press 1;
 
+let nav = document.querySelector('.nav');
 let stopBtn = document.createElement('button');
 stopBtn.setAttribute('class','buttonHolder')
 stopBtn.textContent = ("Stop");
@@ -15,21 +17,26 @@ restartBtn.setAttribute('class','buttonHolder')
 restartBtn.textContent = ("Restart");
 let container = document.querySelector('.container');
 let scoreBoard = document.createElement('p');
+scoreBoard.setAttribute('class','scoreBoard')
+scoreBoard.setAttribute('style','display:inline-block');
 let countDownTimer = document.createElement('p');
+countDownTimer.setAttribute('class','countDownTimer');
+countDownTimer.setAttribute('style','display:inline-block');
+let blanketText = document.querySelector('.blanket');
 
 scoreBoard.innerHTML = (`Score = ${score}`);
 countDownTimer.innerHTML = (`Timer = ${gameTime}`);
 
-container.appendChild(startBtn);
-container.appendChild(stopBtn);
-container.appendChild(restartBtn);
-container.appendChild(scoreBoard);
-container.appendChild(countDownTimer);
+
+nav.appendChild(startBtn);
+nav.appendChild(stopBtn);
+nav.appendChild(restartBtn);
+nav.appendChild(scoreBoard);
+nav.appendChild(countDownTimer);
 
 let target = document.querySelectorAll(".target");
 //functions 
 function changeColor(){
-    if ( gameState === 0 ) {
         for (let i = 0 ; i < target.length ; i++) {
             target[i].style.backgroundColor = "white";
         }
@@ -46,13 +53,15 @@ function changeColor(){
                 changeColor();
             }
         });
-    }
-    else {
-        alert("Please press Restart");
-    }
 };
 
 var timerInterval;
+var startInterval;
+
+function startIntervalCountdown() {
+    startCounter--;
+    blanketText.innerHTML = (`${startCounter}`);
+}
 
 function timerCountDownFunction() {
     gameTime--;
@@ -64,16 +73,36 @@ function timerCountDownFunction() {
     }
 }
 
+function clearStartCountInterval() {
+    clearInterval(startInterval);
+    document.querySelector('.blanket').style.opacity = "0";
+    document.querySelector('.blanket').style.zIndex = "-1";
+}
+
+function startCount() {
+    document.querySelector('.blanket').style.opacity = "0.8";
+    startInterval = setInterval(startIntervalCountdown,1000);
+    setTimeout(clearStartCountInterval,3000);
+}
+
 // event listener
 startBtn.addEventListener('click', function() {
-    //startTime();
-    setTimeout(changeColor,3000);
-    timerInterval = setInterval(timerCountDownFunction,1000);
+    if (gameState === 0) {
+        startCount()
+        setTimeout(changeColor,4000);
+        timerInterval = setInterval(timerCountDownFunction,1000);
+    }
+    else {
+        alert("Please press Restart")
+    }
 })
 
 stopBtn.addEventListener('click', function() {
     clearInterval(timerInterval);
     gameState = 1;
+    document.querySelector('.blanket').style.opacity = "0.8";
+    document.querySelector('.blanket').style.zIndex = "1";
+    blanketText.innerHTML = (`Stop`);
 })
 
 restartBtn.addEventListener('click', function() {
@@ -81,10 +110,14 @@ restartBtn.addEventListener('click', function() {
         target[i].style.backgroundColor = "white";
     }
     score = 0;
-    gameTime = 8;
+    gameTime = 20;
     scoreBoard.innerHTML = (`Score = 0`);
-    countDownTimer.innerHTML = (`Timer = 5`);
+    countDownTimer.innerHTML = (`Timer = 20`);
     gameState = 0;
+    startCounter = 3;
+    blanketText.innerHTML = (`${startCounter}`);
+    document.querySelector('.blanket').style.zIndex = "1";
+    document.querySelector('.blanket').style.opacity = "0";
 })
 
 
