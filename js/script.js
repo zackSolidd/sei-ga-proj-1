@@ -31,32 +31,42 @@ countDownTimer.innerHTML = (`Timer = ${gameTime}`);
 nav.appendChild(startBtn);
 nav.appendChild(stopBtn);
 nav.appendChild(restartBtn);
-nav.appendChild(scoreBoard);
-nav.appendChild(countDownTimer);
+container.appendChild(scoreBoard);
+container.appendChild(countDownTimer);
 
 let target = document.querySelectorAll(".target");
+var tempNum = 0;
 //functions 
 function changeColor(){
-        for (let i = 0 ; i < target.length ; i++) {
-            target[i].style.backgroundColor = "white";
-        }
         let randomNumber = Math.floor(Math.random()*16+1);
-        console.log(randomNumber);
-        let box = document.querySelector('.box'+randomNumber);
-        box.style.backgroundColor = 'red';
-        box.addEventListener('click', function(e) {
-            console.log(e.srcElement.className);
-            if ( e.srcElement.className == 'box'+randomNumber+' target') {
-                score++;
-                console.log('score =' + score);
-                scoreBoard.innerHTML = (`Score = ${score}`);
-                changeColor();
-            }
-        });
+        if (tempNum === randomNumber) {
+            console.log('SAME NUMBER');
+            changeColor();
+        }
+        else {
+            tempNum = randomNumber;
+            console.log(randomNumber);
+            let box = document.querySelector('.box'+randomNumber);
+            box.style.backgroundColor = 'red';
+            box.addEventListener('click', function handler(e) {
+                e.currentTarget.removeEventListener(e.type, handler);
+                console.log(e.srcElement.className);
+                if ( e.srcElement.className == 'box'+randomNumber+' target') {
+                    score++;
+                    console.log('score =' + score);
+                    scoreBoard.innerHTML = (`Score = ${score}`);
+                    box.style.backgroundColor = 'white';
+                    changeColor();
+                }
+            });
+        }
 };
 
 var timerInterval;
 var startInterval;
+
+
+
 
 function startIntervalCountdown() {
     startCounter--;
@@ -71,9 +81,12 @@ function timerCountDownFunction() {
     gameTime--;
     countDownTimer.innerHTML = (`Timer = ${gameTime}`); 
     if (gameTime === 0) {
-        alert(`Times Up !!! \n Your Score is ${score}`);
+        alert(`Time is Up !!! \n Your Score is ${score}`);
         clearInterval(timerInterval);
         gameState = 1;
+        document.querySelector('.blanket').style.opacity = "0.8";
+        document.querySelector('.blanket').style.zIndex = "1";
+        blanketText.innerHTML = (``);
     }
 }
 
@@ -88,13 +101,14 @@ function startCount() {
     startInterval = setInterval(startIntervalCountdown,1000);
     setTimeout(clearStartCountInterval,3000);
 }
-
+var changeColorTimeout
+var gameTimerTrackerTimeout
 // event listener
 startBtn.addEventListener('click', function() {
     if (gameState === 0) {
-        startCount()
-        setTimeout(changeColor,3000);
-        setTimeout(gameTimeTracker,3000);
+        startCount();
+        changeColorTimeout = setTimeout(changeColor,3000);
+        gameTimerTrackerTimeout = setTimeout(gameTimeTracker,3000);
     }
     else {
         alert("Please press Restart")
@@ -104,6 +118,9 @@ startBtn.addEventListener('click', function() {
 stopBtn.addEventListener('click', function() {
     clearInterval(timerInterval);
     gameState = 1;
+    clearInterval(startInterval);
+    clearTimeout(changeColorTimeout);
+    clearTimeout(gameTimerTrackerTimeout);
     document.querySelector('.blanket').style.opacity = "0.8";
     document.querySelector('.blanket').style.zIndex = "1";
     blanketText.innerHTML = (`Stop`);
