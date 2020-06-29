@@ -3,7 +3,7 @@ console.log("hello world");
 let score = 0;
 let gameTime = 20;
 let startCounter = 4;
-let gameState = 0; //0 press start to play, 1 press restart first then press 1;
+let gameState = 1; //0 press start to play, 1 press restart first then press 1;
 
 let nav = document.querySelector('.nav');
 let stopBtn = document.createElement('button');
@@ -63,6 +63,10 @@ function startIntervalCountdown() {
     blanketText.innerHTML = (`${startCounter}`);
 }
 
+function gameTimeTracker() {
+    timerInterval = setInterval(timerCountDownFunction,1000);
+}
+
 function timerCountDownFunction() {
     gameTime--;
     countDownTimer.innerHTML = (`Timer = ${gameTime}`); 
@@ -89,8 +93,8 @@ function startCount() {
 startBtn.addEventListener('click', function() {
     if (gameState === 0) {
         startCount()
-        setTimeout(changeColor,4000);
-        timerInterval = setInterval(timerCountDownFunction,1000);
+        setTimeout(changeColor,3000);
+        setTimeout(gameTimeTracker,3000);
     }
     else {
         alert("Please press Restart")

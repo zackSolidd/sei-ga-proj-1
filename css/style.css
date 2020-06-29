@@ -38,7 +38,9 @@ body {
     background-color: black;
     margin: auto;
     margin-top: 50px;
+    cursor: crosshair;
 }
+
 
 .target {
     width: 100px;
