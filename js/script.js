@@ -18,10 +18,8 @@ restartBtn.textContent = ("Restart");
 let container = document.querySelector('.container');
 let scoreBoard = document.createElement('p');
 scoreBoard.setAttribute('class','scoreBoard')
-scoreBoard.setAttribute('style','display:inline-block');
 let countDownTimer = document.createElement('p');
 countDownTimer.setAttribute('class','countDownTimer');
-countDownTimer.setAttribute('style','display:inline-block');
 let blanketText = document.querySelector('.blanket');
 
 scoreBoard.innerHTML = (`Score = ${score}`);
@@ -31,12 +29,14 @@ countDownTimer.innerHTML = (`Timer = ${gameTime}`);
 nav.appendChild(startBtn);
 nav.appendChild(stopBtn);
 nav.appendChild(restartBtn);
-container.appendChild(scoreBoard);
-container.appendChild(countDownTimer);
+nav.appendChild(scoreBoard);
+nav.appendChild(countDownTimer);
 
 let target = document.querySelectorAll(".target");
 var tempNum = 0;
+
 //functions 
+
 function changeColor(){
         let randomNumber = Math.floor(Math.random()*16+1);
         if (tempNum === randomNumber) {
@@ -49,6 +49,7 @@ function changeColor(){
             let box = document.querySelector('.box'+randomNumber);
             box.style.backgroundColor = 'red';
             box.addEventListener('click', function handler(e) {
+                // pewSound();
                 e.currentTarget.removeEventListener(e.type, handler);
                 console.log(e.srcElement.className);
                 if ( e.srcElement.className == 'box'+randomNumber+' target') {
@@ -65,9 +66,6 @@ function changeColor(){
 var timerInterval;
 var startInterval;
 
-
-
-
 function startIntervalCountdown() {
     startCounter--;
     blanketText.innerHTML = (`${startCounter}`);
@@ -81,7 +79,7 @@ function timerCountDownFunction() {
     gameTime--;
     countDownTimer.innerHTML = (`Timer = ${gameTime}`); 
     if (gameTime === 0) {
-        alert(`Time is Up !!! \n Your Score is ${score}`);
+        console.log(`Time is Up !!! \n Your Score is ${score}`);
         clearInterval(timerInterval);
         gameState = 1;
         document.querySelector('.blanket').style.opacity = "0.8";
@@ -101,8 +99,14 @@ function startCount() {
     startInterval = setInterval(startIntervalCountdown,1000);
     setTimeout(clearStartCountInterval,3000);
 }
-var changeColorTimeout
-var gameTimerTrackerTimeout
+
+// var pewPew = document.getElementById('pewPew');
+// function pewSound() {
+//     pewPew.play();
+// }
+
+var changeColorTimeout;
+var gameTimerTrackerTimeout;
 // event listener
 startBtn.addEventListener('click', function() {
     if (gameState === 0) {
@@ -111,7 +115,7 @@ startBtn.addEventListener('click', function() {
         gameTimerTrackerTimeout = setTimeout(gameTimeTracker,3000);
     }
     else {
-        alert("Please press Restart")
+        alert("Please press Restart");
     }
 })
 
@@ -130,8 +134,13 @@ restartBtn.addEventListener('click', function() {
     for (let i = 0 ; i < target.length ; i++) {
         target[i].style.backgroundColor = "white";
     }
+    clearInterval(timerInterval);
+    clearInterval(startInterval);
+    clearTimeout(changeColorTimeout);
+    clearTimeout(gameTimerTrackerTimeout);
     score = 0;
     gameTime = 20;
+    tempNum = 0;
     scoreBoard.innerHTML = (`Score = 0`);
     countDownTimer.innerHTML = (`Timer = 20`);
     gameState = 0;
