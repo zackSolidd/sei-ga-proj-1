@@ -33,34 +33,29 @@ nav.appendChild(scoreBoard);
 nav.appendChild(countDownTimer);
 
 let target = document.querySelectorAll(".target");
-var tempNum = 0;
 
 //functions 
 
 function changeColor(){
-        let randomNumber = Math.floor(Math.random()*16+1);
-        if (tempNum === randomNumber) {
-            console.log('SAME NUMBER');
+    let randomNumber = Math.floor(Math.random()*16+1);
+    console.log(randomNumber);
+    let box = document.querySelector('.box'+randomNumber);
+    box.classList.remove('whiteCircle');
+    box.classList.add('redCircle');
+    box.addEventListener('click', function handler(e) {
+        //pewSound();
+        e.target.removeEventListener(e.type, handler);
+        console.log(e.target.className);
+        if ( e.target.className == 'box'+randomNumber+' target'+' redCircle') {
+            score++;
+            console.log('score =' + score);
+            scoreBoard.innerHTML = (`Score = ${score}`);
+            box.classList.remove('redCircle');
+            box.classList.add('whiteCircle');
             changeColor();
         }
-        else {
-            tempNum = randomNumber;
-            console.log(randomNumber);
-            let box = document.querySelector('.box'+randomNumber);
-            box.style.backgroundColor = 'red';
-            box.addEventListener('click', function handler(e) {
-                // pewSound();
-                e.currentTarget.removeEventListener(e.type, handler);
-                console.log(e.srcElement.className);
-                if ( e.srcElement.className == 'box'+randomNumber+' target') {
-                    score++;
-                    console.log('score =' + score);
-                    scoreBoard.innerHTML = (`Score = ${score}`);
-                    box.style.backgroundColor = 'white';
-                    changeColor();
-                }
-            });
-        }
+    });
+        
 };
 
 var timerInterval;
@@ -132,7 +127,8 @@ stopBtn.addEventListener('click', function() {
 
 restartBtn.addEventListener('click', function() {
     for (let i = 0 ; i < target.length ; i++) {
-        target[i].style.backgroundColor = "white";
+        target[i].classList.remove('redCircle');
+        target[i].classList.add('whiteCircle');
     }
     clearInterval(timerInterval);
     clearInterval(startInterval);
