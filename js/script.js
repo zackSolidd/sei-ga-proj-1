@@ -1,7 +1,9 @@
 console.log("hello world");
 
+let hit = 0;
+let miss = 0;
 let score = 0;
-let gameTime = 20;
+let gameTime = 10;
 let startCounter = 4;
 let gameState = 1; //0 press start to play, 1 press restart first then press 1;
 
@@ -16,47 +18,67 @@ let restartBtn = document.createElement('button');
 restartBtn.setAttribute('class','buttonHolder')
 restartBtn.textContent = ("Restart");
 let container = document.querySelector('.container');
+let hitBoard = document.createElement('p');
+hitBoard.setAttribute('class','hitBoard');
+let missBoard = document.createElement('p');
+missBoard.setAttribute('class','missBoard');
 let scoreBoard = document.createElement('p');
-scoreBoard.setAttribute('class','scoreBoard')
+scoreBoard.setAttribute('class','scoreBoard');
 let countDownTimer = document.createElement('p');
 countDownTimer.setAttribute('class','countDownTimer');
 let blanketText = document.querySelector('.blanket');
+let scoreBoardText = document.querySelector('.endGameScoreboard');
 
-scoreBoard.innerHTML = (`Score = ${score}`);
+hitBoard.innerHTML = (`Hit = ${hit}`);
+missBoard.innerHTML = (`Miss = ${miss}`);
 countDownTimer.innerHTML = (`Timer = ${gameTime}`);
 
 
 nav.appendChild(startBtn);
 nav.appendChild(stopBtn);
 nav.appendChild(restartBtn);
-nav.appendChild(scoreBoard);
+nav.appendChild(hitBoard);
+nav.appendChild(missBoard);
 nav.appendChild(countDownTimer);
 
 let target = document.querySelectorAll(".target");
+let redBox = null;
+let randomNumber = 0;
 
 //functions 
 
 function changeColor(){
-    let randomNumber = Math.floor(Math.random()*16+1);
+    randomNumber = Math.floor(Math.random()*16+1);
     console.log(randomNumber);
-    let box = document.querySelector('.box'+randomNumber);
-    box.classList.remove('whiteCircle');
-    box.classList.add('redCircle');
-    box.addEventListener('click', function handler(e) {
+    redBox = document.querySelector('.box'+randomNumber);
+    redBox.classList.remove('whiteCircle');
+    redBox.classList.add('redCircle');
+};
+
+for (let i = 1 ; i < 17 ; i++) {
+    let box = document.querySelector('.box'+i);
+    box.addEventListener('click', function (e) {
+    //box.addEventListener('click', function handler(e) {
         //pewSound();
-        e.target.removeEventListener(e.type, handler);
+        //e.target.removeEventListener(e.type, handler);
         console.log(e.target.className);
-        if ( e.target.className == 'box'+randomNumber+' target'+' redCircle') {
+        if (box.classList.contains('redCircle')) {
+            hit++;
             score++;
-            console.log('score =' + score);
-            scoreBoard.innerHTML = (`Score = ${score}`);
-            box.classList.remove('redCircle');
-            box.classList.add('whiteCircle');
+            console.log('Score =' + score);
+            hitBoard.innerHTML = (`Hit = ${hit}`);
+            redBox.classList.remove('redCircle');
+            redBox.classList.add('whiteCircle');
             changeColor();
         }
+        else {
+            console.log('Wrong button');
+            miss++;
+            score--;
+            missBoard.innerHTML = (`Miss = ${miss}`);
+        }
     });
-        
-};
+}
 
 var timerInterval;
 var startInterval;
@@ -77,9 +99,12 @@ function timerCountDownFunction() {
         console.log(`Time is Up !!! \n Your Score is ${score}`);
         clearInterval(timerInterval);
         gameState = 1;
-        document.querySelector('.blanket').style.opacity = "0.8";
-        document.querySelector('.blanket').style.zIndex = "1";
+        document.querySelector('.blanket').style.opacity = "0";
+        document.querySelector('.blanket').style.zIndex = "-1";
+        document.querySelector('.endGameScoreboard').style.opacity = "0.8";
+        document.querySelector('.endGameScoreboard').style.zIndex = "1";
         blanketText.innerHTML = (``);
+        scoreBoardText.innerHTML = (`Score = ${score}`);
     }
 }
 
@@ -115,8 +140,8 @@ startBtn.addEventListener('click', function() {
 })
 
 stopBtn.addEventListener('click', function() {
-    clearInterval(timerInterval);
     gameState = 1;
+    clearInterval(timerInterval);
     clearInterval(startInterval);
     clearTimeout(changeColorTimeout);
     clearTimeout(gameTimerTrackerTimeout);
@@ -134,11 +159,15 @@ restartBtn.addEventListener('click', function() {
     clearInterval(startInterval);
     clearTimeout(changeColorTimeout);
     clearTimeout(gameTimerTrackerTimeout);
+    hit = 0;
+    miss = 0;
     score = 0;
-    gameTime = 20;
+    gameTime = 10;
     tempNum = 0;
+    hitBoard.innerHTML = (`Hit = 0`);
+    missBoard.innerHTML = (`Miss = 0`);
     scoreBoard.innerHTML = (`Score = 0`);
-    countDownTimer.innerHTML = (`Timer = 20`);
+    countDownTimer.innerHTML = (`Timer = 10`);
     gameState = 0;
     startCounter = 3;
     blanketText.innerHTML = (`${startCounter}`);

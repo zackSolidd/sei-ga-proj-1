@@ -20,9 +20,22 @@ body {
     position: absolute;
     z-index: 1;
     background-color: black;
-    opacity: 0;
+    opacity: 0.8;
     margin-left: 150px;
     font-size: 300px;
+    color: white;
+    text-align: center;
+}
+
+.endGameScoreboard {
+    width: 700px;
+    height: 700px;
+    position: absolute;
+    z-index: -2;
+    background-color: blue;
+    opacity: 1;
+    margin-left: 150px;
+    font-size: 100px;
     color: white;
     text-align: center;
 }
@@ -38,7 +51,6 @@ body {
     margin: auto;
     margin-top: 0px;
 }
-
 
 .target {
     width: 170px;
@@ -63,7 +75,7 @@ body {
     float: left;
 }
 
-.scoreBoard , .countDownTimer {
+.countDownTimer , .hitBoard , .missBoard {
     float: right;
     font-size: 40px;
     margin-right: 10px;
