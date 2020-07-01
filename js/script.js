@@ -3,9 +3,9 @@ console.log("hello world");
 let hit = 0;
 let miss = 0;
 let score = 0;
-let gameTime = 10;
-let startCounter = 4;
-let gameState = 1; //0 press start to play, 1 press restart first then press 1;
+let gameTime = 20;
+let startCounter = 3;
+let gameState = 0; //0 press start to play, 1 press restart first then press 1;
 
 let nav = document.querySelector('.nav');
 let stopBtn = document.createElement('button');
@@ -32,7 +32,7 @@ let scoreBoardText = document.querySelector('.endGameScoreboard');
 hitBoard.innerHTML = (`Hit = ${hit}`);
 missBoard.innerHTML = (`Miss = ${miss}`);
 countDownTimer.innerHTML = (`Timer = ${gameTime}`);
-
+blanketText.innerHTML = ('Please Press <br> Start');
 
 nav.appendChild(startBtn);
 nav.appendChild(stopBtn);
@@ -43,9 +43,28 @@ nav.appendChild(countDownTimer);
 
 let target = document.querySelectorAll(".target");
 let redBox = null;
+let greenBox = null;
 let randomNumber = 0;
+let randomNumberFriendly = 0;
 
 //functions 
+
+function friendlyUnit(){
+    randomNumberFriendly = Math.floor(Math.random()*16+1); 
+    console.log("friendly = " + randomNumberFriendly);
+    greenBox = document.querySelector('.box'+randomNumberFriendly);
+    if (greenBox.classList.contains('redCircle')) {
+        friendlyUnit();
+    }
+    else {
+        greenBox.classList.remove('whiteCircle');
+        greenBox.classList.add('greenCircle');
+        setTimeout(function() {
+            greenBox.classList.remove('greenCircle');
+            greenBox.classList.add('whiteCircle');  
+        },2000);
+    }  
+}
 
 function changeColor(){
     randomNumber = Math.floor(Math.random()*16+1);
@@ -59,7 +78,7 @@ for (let i = 1 ; i < 17 ; i++) {
     let box = document.querySelector('.box'+i);
     box.addEventListener('click', function (e) {
     //box.addEventListener('click', function handler(e) {
-        //pewSound();
+        // pewSound();
         //e.target.removeEventListener(e.type, handler);
         console.log(e.target.className);
         if (box.classList.contains('redCircle')) {
@@ -70,6 +89,18 @@ for (let i = 1 ; i < 17 ; i++) {
             redBox.classList.remove('redCircle');
             redBox.classList.add('whiteCircle');
             changeColor();
+        }
+        else if (box.classList.contains('greenCircle')) {
+            console.log(`YOU KILL A FRIENDLY`);
+            clearInterval(timerInterval);
+            clearTimeout(friendlyTimer);
+            gameState = 1;
+            document.querySelector('.blanket').style.opacity = "0";
+            document.querySelector('.blanket').style.zIndex = "-1";
+            scoreBoardText.style.opacity = "0.8";
+            scoreBoardText.style.zIndex = "1";
+            blanketText.innerHTML = (``);
+            scoreBoardText.innerHTML = ('YOU LOSE');
         }
         else {
             console.log('Wrong button');
@@ -83,10 +114,24 @@ for (let i = 1 ; i < 17 ; i++) {
 var timerInterval;
 var startInterval;
 
-function startIntervalCountdown() {
-    startCounter--;
-    blanketText.innerHTML = (`${startCounter}`);
+function startCount() {
+    document.querySelector('.blanket').style.opacity = "0.8";
+    startInterval = setInterval(startIntervalCountdown,1000);
+    setTimeout(clearStartCountInterval,3500);
 }
+
+function startIntervalCountdown() {
+    blanketText.innerHTML = (`${startCounter}`);
+    console.log(startCounter);
+    startCounter--;
+}
+
+function clearStartCountInterval() {
+    clearInterval(startInterval);
+    document.querySelector('.blanket').style.opacity = "0";
+    document.querySelector('.blanket').style.zIndex = "-1";
+}
+
 
 function gameTimeTracker() {
     timerInterval = setInterval(timerCountDownFunction,1000);
@@ -98,27 +143,18 @@ function timerCountDownFunction() {
     if (gameTime === 0) {
         console.log(`Time is Up !!! \n Your Score is ${score}`);
         clearInterval(timerInterval);
+        clearTimeout(friendlyTimer);
         gameState = 1;
         document.querySelector('.blanket').style.opacity = "0";
         document.querySelector('.blanket').style.zIndex = "-1";
-        document.querySelector('.endGameScoreboard').style.opacity = "0.8";
-        document.querySelector('.endGameScoreboard').style.zIndex = "1";
+        scoreBoardText.style.opacity = "0.8";
+        scoreBoardText.style.zIndex = "1";
         blanketText.innerHTML = (``);
-        scoreBoardText.innerHTML = (`Score = ${score}`);
+        scoreBoardText.innerHTML = ('Hits :' + hit + '<br> Misses :' + miss + '<br> Total Score :' + score);
     }
 }
 
-function clearStartCountInterval() {
-    clearInterval(startInterval);
-    document.querySelector('.blanket').style.opacity = "0";
-    document.querySelector('.blanket').style.zIndex = "-1";
-}
 
-function startCount() {
-    document.querySelector('.blanket').style.opacity = "0.8";
-    startInterval = setInterval(startIntervalCountdown,1000);
-    setTimeout(clearStartCountInterval,3000);
-}
 
 // var pewPew = document.getElementById('pewPew');
 // function pewSound() {
@@ -127,12 +163,19 @@ function startCount() {
 
 var changeColorTimeout;
 var gameTimerTrackerTimeout;
+var friendlyTimer;
+
+function friendlyTimerInterval() {
+   friendlyTimer = setInterval(friendlyUnit,5000)
+}
+
 // event listener
 startBtn.addEventListener('click', function() {
     if (gameState === 0) {
         startCount();
-        changeColorTimeout = setTimeout(changeColor,3000);
-        gameTimerTrackerTimeout = setTimeout(gameTimeTracker,3000);
+        changeColorTimeout = setTimeout(changeColor,4000);
+        gameTimerTrackerTimeout = setTimeout(gameTimeTracker,4000);
+        setTimeout(friendlyTimerInterval,5000);
     }
     else {
         alert("Please press Restart");
@@ -145,8 +188,11 @@ stopBtn.addEventListener('click', function() {
     clearInterval(startInterval);
     clearTimeout(changeColorTimeout);
     clearTimeout(gameTimerTrackerTimeout);
+    clearTimeout(friendlyTimer);
     document.querySelector('.blanket').style.opacity = "0.8";
     document.querySelector('.blanket').style.zIndex = "1";
+    scoreBoardText.style.zIndex = "-2";
+    scoreBoardText.style.opacity = "0";
     blanketText.innerHTML = (`Stop`);
 })
 
@@ -159,20 +205,22 @@ restartBtn.addEventListener('click', function() {
     clearInterval(startInterval);
     clearTimeout(changeColorTimeout);
     clearTimeout(gameTimerTrackerTimeout);
+    clearTimeout(friendlyTimer);
     hit = 0;
     miss = 0;
     score = 0;
-    gameTime = 10;
-    tempNum = 0;
+    gameTime = 20;
     hitBoard.innerHTML = (`Hit = 0`);
     missBoard.innerHTML = (`Miss = 0`);
     scoreBoard.innerHTML = (`Score = 0`);
-    countDownTimer.innerHTML = (`Timer = 10`);
+    countDownTimer.innerHTML = (`Timer = 20`);
     gameState = 0;
     startCounter = 3;
     blanketText.innerHTML = (`${startCounter}`);
     document.querySelector('.blanket').style.zIndex = "1";
     document.querySelector('.blanket').style.opacity = "0";
+    scoreBoardText.style.zIndex = "-2";
+    scoreBoardText.style.opacity = "0";
 })
 
 

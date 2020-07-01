@@ -4,12 +4,13 @@
 
 body {
     margin: 0;
+    overflow: hidden;
+    background-color: grey;
 }
 
 .container {
-    width: 1000px;
-    height: 1000px;
-    position: relative;
+    width: 900px;
+    height: 900px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -21,10 +22,13 @@ body {
     z-index: 1;
     background-color: black;
     opacity: 0.8;
-    margin-left: 150px;
-    font-size: 300px;
+    margin-left: 100px;
+    font-size: 150px;
     color: white;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .endGameScoreboard {
@@ -33,11 +37,14 @@ body {
     position: absolute;
     z-index: -2;
     background-color: blue;
-    opacity: 1;
-    margin-left: 150px;
+    opacity: 0.8;
+    margin-left: 100px;
     font-size: 100px;
     color: white;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #board {
@@ -68,6 +75,10 @@ body {
     background-color: red;
 }
 
+.greenCircle {
+    background-color: green;
+}
+
 .buttonHolder {
     width: 100px;
     height: 100px;
@@ -82,5 +93,5 @@ body {
 }
 
 .countDownTimer {
-    padding-right: 10px;
+    margin-right: 10px;
 }
