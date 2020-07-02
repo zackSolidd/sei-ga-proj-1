@@ -62,7 +62,7 @@ let randomNumber = 0;
 let randomNumberFriendly = 0;
 let friendlyUnitToggle = 0;
 
-//functions 
+//functions for making circles to appear
 
 function friendlyUnit(){
     randomNumberFriendly = Math.floor(Math.random()*16+1); 
@@ -130,13 +130,16 @@ for (let i = 1 ; i < 17 ; i++) {
     });
 }
 
+//functions for all timers
+
 var timerInterval;
 var startInterval;
 
 function startCount() {
     document.querySelector('.blanket').style.opacity = "0.8";
     startInterval = setInterval(startIntervalCountdown,1000);
-    setTimeout(clearStartCountInterval,3500);
+    setTimeout(clearStartCountInterval,3800);
+    setTimeout(disableStopBtn,3800);
 }
 
 function startIntervalCountdown() {
@@ -174,20 +177,23 @@ function timerCountDownFunction() {
     }
 }
 
-
-
-var pewPew = document.getElementById('pewPew');
-function pewSound() {
-    pewPew.volume = 0.7;
-    pewPew.play();
-}
-
 var changeColorTimeout;
 var gameTimerTrackerTimeout;
 var friendlyTimer;
 
 function friendlyTimerInterval() {
    friendlyTimer = setInterval(friendlyUnit,5000)
+}
+
+function disableStopBtn() {
+    stopBtn.disabled = false;
+}
+
+//audio 
+var pewPew = document.getElementById('pewPew');
+function pewSound() {
+    pewPew.volume = 0.7;
+    pewPew.play();
 }
 
 // event listener
@@ -200,6 +206,7 @@ startBtn.addEventListener('click', function() {
             setTimeout(friendlyTimerInterval,2000);
         }
         startBtn.disabled = true;
+        stopBtn.disabled = true;
     }
     else {
         alert("Please press Restart");
@@ -217,7 +224,7 @@ stopBtn.addEventListener('click', function() {
     document.querySelector('.blanket').style.zIndex = "1";
     scoreBoardText.style.zIndex = "-2";
     scoreBoardText.style.opacity = "0";
-    blanketText.innerHTML = (`Stop`);
+    blanketText.innerHTML = (`Press Restart`);
     blanketText.appendChild(fpsLogo);
 })
 
