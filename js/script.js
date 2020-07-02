@@ -8,6 +8,7 @@ let startCounter = 3;
 let gameState = 0; //0 press start to play, 1 press restart first then press 1;
 
 let nav = document.querySelector('.nav');
+let navRight = document.querySelector('.navRight');
 let stopBtn = document.createElement('button');
 stopBtn.setAttribute('class','buttonHolder')
 stopBtn.textContent = ("Stop");
@@ -15,8 +16,11 @@ let startBtn = document.createElement('button');
 startBtn.setAttribute('class','buttonHolder')
 startBtn.textContent = ("Start");
 let restartBtn = document.createElement('button');
-restartBtn.setAttribute('class','buttonHolder')
+restartBtn.setAttribute('class','buttonHolder');
 restartBtn.textContent = ("Restart");
+let friendlyBtn = document.createElement('button');
+friendlyBtn.setAttribute('class','buttonHolder');
+friendlyBtn.textContent = ('Friendly Off');
 let container = document.querySelector('.container');
 let hitBoard = document.createElement('p');
 hitBoard.setAttribute('class','hitBoard');
@@ -28,6 +32,10 @@ let countDownTimer = document.createElement('p');
 countDownTimer.setAttribute('class','countDownTimer');
 let blanketText = document.querySelector('.blanket');
 let scoreBoardText = document.querySelector('.endGameScoreboard');
+let fpsLogo = document.createElement('img');
+fpsLogo.setAttribute('src','fpslab.png');
+let fpsLogo2 = document.createElement('img');
+fpsLogo2.setAttribute('src','fpslab.png');
 
 hitBoard.innerHTML = (`Hit = ${hit}`);
 missBoard.innerHTML = (`Miss = ${miss}`);
@@ -37,15 +45,20 @@ blanketText.innerHTML = ('Please Press <br> Start');
 nav.appendChild(startBtn);
 nav.appendChild(stopBtn);
 nav.appendChild(restartBtn);
-nav.appendChild(hitBoard);
-nav.appendChild(missBoard);
-nav.appendChild(countDownTimer);
+nav.appendChild(friendlyBtn);
+navRight.appendChild(hitBoard);
+navRight.appendChild(missBoard);
+navRight.appendChild(countDownTimer);
+blanketText.appendChild(fpsLogo);
+scoreBoardText.appendChild(fpsLogo2);
+
 
 let target = document.querySelectorAll(".target");
 let redBox = null;
 let greenBox = null;
 let randomNumber = 0;
 let randomNumberFriendly = 0;
+let friendlyUnitToggle = 0;
 
 //functions 
 
@@ -70,16 +83,19 @@ function changeColor(){
     randomNumber = Math.floor(Math.random()*16+1);
     console.log(randomNumber);
     redBox = document.querySelector('.box'+randomNumber);
-    redBox.classList.remove('whiteCircle');
-    redBox.classList.add('redCircle');
+    if (redBox.classList.contains('greenCircle')) {
+        changeColor();
+    }
+    else {
+        redBox.classList.remove('whiteCircle');
+        redBox.classList.add('redCircle');
+    }
 };
 
 for (let i = 1 ; i < 17 ; i++) {
     let box = document.querySelector('.box'+i);
     box.addEventListener('click', function (e) {
-    //box.addEventListener('click', function handler(e) {
         // pewSound();
-        //e.target.removeEventListener(e.type, handler);
         console.log(e.target.className);
         if (box.classList.contains('redCircle')) {
             hit++;
@@ -175,7 +191,10 @@ startBtn.addEventListener('click', function() {
         startCount();
         changeColorTimeout = setTimeout(changeColor,4000);
         gameTimerTrackerTimeout = setTimeout(gameTimeTracker,4000);
-        setTimeout(friendlyTimerInterval,5000);
+        if (friendlyUnitToggle === 1) {
+            setTimeout(friendlyTimerInterval,2000);
+        }
+        
     }
     else {
         alert("Please press Restart");
@@ -223,7 +242,19 @@ restartBtn.addEventListener('click', function() {
     scoreBoardText.style.opacity = "0";
 })
 
-
+friendlyBtn.addEventListener('click',function() {
+    if (friendlyUnitToggle === 0 ) {
+        friendlyUnitToggle = 1;
+        friendlyBtn.textContent = 'Friendly On';
+    }
+    else if (friendlyUnitToggle === 1 ) {
+        friendlyUnitToggle = 0;
+        friendlyBtn.textContent = 'Friendly Off';
+    }
+    else {
+        console.log(`Friendly Button error`);
+    }
+})
 
 
 

@@ -10,9 +10,13 @@ body {
 
 .container {
     width: 900px;
-    height: 900px;
+    height: 700px;
     margin-left: auto;
     margin-right: auto;
+}
+img {
+    width: 10%;
+    float: right;
 }
 
 .blanket {
@@ -31,12 +35,19 @@ body {
     align-items: center;
 }
 
+.blanket img {
+    width: 100px;
+    float: top;
+    position: absolute;
+    bottom: 5px;
+}
+
 .endGameScoreboard {
     width: 700px;
     height: 700px;
     position: absolute;
     z-index: -2;
-    background-color: blue;
+    background-color: black;
     opacity: 0.8;
     margin-left: 100px;
     font-size: 100px;
@@ -45,6 +56,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.endGameScoreboard img {
+    width: 100px;
+    float: top;
+    position: absolute;
+    bottom: 5px;
 }
 
 #board {
@@ -79,6 +97,13 @@ body {
     background-color: green;
 }
 
+.nav {
+    display: flex;
+    flex-direction: column;
+    float: left;
+    /* margin-top: 300px; */
+}
+
 .buttonHolder {
     width: 100px;
     height: 100px;
@@ -86,12 +111,26 @@ body {
     float: left;
 }
 
-.countDownTimer , .hitBoard , .missBoard {
+
+.navRight {
     float: right;
     font-size: 40px;
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 .countDownTimer {
     margin-right: 10px;
+}
+
+
+@media only screen and (max-width: 1412px) {
+    body {
+        overflow: auto;
+    }
+    .nav {
+        margin-top: 200px;
+    }
+    .navRight {
+        margin-top: 240px;
+    }
 }
