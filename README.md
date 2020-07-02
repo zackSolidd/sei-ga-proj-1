@@ -2,6 +2,8 @@
 
 The Ultimate FPS training solution on HTML.
 
+[Link To Game](https://zacksolidd.github.io/sei-ga-proj-1/)
+
 ---------------------------------------
 
 ### Explanation Of Technologies Used
