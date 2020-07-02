@@ -95,7 +95,7 @@ function changeColor(){
 for (let i = 1 ; i < 17 ; i++) {
     let box = document.querySelector('.box'+i);
     box.addEventListener('click', function (e) {
-        // pewSound();
+        pewSound();
         console.log(e.target.className);
         if (box.classList.contains('redCircle')) {
             hit++;
@@ -172,10 +172,10 @@ function timerCountDownFunction() {
 
 
 
-// var pewPew = document.getElementById('pewPew');
-// function pewSound() {
-//     pewPew.play();
-// }
+var pewPew = document.getElementById('pewPew');
+function pewSound() {
+    pewPew.play();
+}
 
 var changeColorTimeout;
 var gameTimerTrackerTimeout;
@@ -194,7 +194,7 @@ startBtn.addEventListener('click', function() {
         if (friendlyUnitToggle === 1) {
             setTimeout(friendlyTimerInterval,2000);
         }
-        
+        startBtn.disabled = true;
     }
     else {
         alert("Please press Restart");
@@ -225,6 +225,7 @@ restartBtn.addEventListener('click', function() {
     clearTimeout(changeColorTimeout);
     clearTimeout(gameTimerTrackerTimeout);
     clearTimeout(friendlyTimer);
+    startBtn.disabled = false;
     hit = 0;
     miss = 0;
     score = 0;
