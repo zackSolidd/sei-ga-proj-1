@@ -101,7 +101,6 @@ img {
     display: flex;
     flex-direction: column;
     float: left;
-    /* margin-top: 300px; */
 }
 
 .buttonHolder {
@@ -132,5 +131,20 @@ img {
     }
     .navRight {
         margin-top: 240px;
+    }
+}
+
+@media only screen and (max-width: 414px) {
+    body {
+        overflow: auto;
+    }
+    .nav {
+        margin-top: 200px;
+    }
+    .navRight {
+        margin-top: 240px;
+    }
+    .blanket, .endGameScoreboard {
+        margin-top: 535px;
     }
 }

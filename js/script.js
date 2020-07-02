@@ -6,6 +6,7 @@ let score = 0;
 let gameTime = 20;
 let startCounter = 3;
 let gameState = 0; //0 press start to play, 1 press restart first then press 1;
+let sound = 1;
 
 let nav = document.querySelector('.nav');
 let navRight = document.querySelector('.navRight');
@@ -21,6 +22,9 @@ restartBtn.textContent = ("Restart");
 let friendlyBtn = document.createElement('button');
 friendlyBtn.setAttribute('class','buttonHolder');
 friendlyBtn.textContent = ('Friendly Off');
+let soundBtn = document.createElement('button');
+soundBtn.setAttribute('class','buttonHolder');
+soundBtn.textContent = ('Sound On');
 let container = document.querySelector('.container');
 let hitBoard = document.createElement('p');
 hitBoard.setAttribute('class','hitBoard');
@@ -34,8 +38,6 @@ let blanketText = document.querySelector('.blanket');
 let scoreBoardText = document.querySelector('.endGameScoreboard');
 let fpsLogo = document.createElement('img');
 fpsLogo.setAttribute('src','fpslab.png');
-let fpsLogo2 = document.createElement('img');
-fpsLogo2.setAttribute('src','fpslab.png');
 
 hitBoard.innerHTML = (`Hit = ${hit}`);
 missBoard.innerHTML = (`Miss = ${miss}`);
@@ -46,11 +48,11 @@ nav.appendChild(startBtn);
 nav.appendChild(stopBtn);
 nav.appendChild(restartBtn);
 nav.appendChild(friendlyBtn);
+nav.appendChild(soundBtn);
 navRight.appendChild(hitBoard);
 navRight.appendChild(missBoard);
 navRight.appendChild(countDownTimer);
 blanketText.appendChild(fpsLogo);
-scoreBoardText.appendChild(fpsLogo2);
 
 
 let target = document.querySelectorAll(".target");
@@ -117,6 +119,7 @@ for (let i = 1 ; i < 17 ; i++) {
             scoreBoardText.style.zIndex = "1";
             blanketText.innerHTML = (``);
             scoreBoardText.innerHTML = ('YOU LOSE');
+            scoreBoardText.appendChild(fpsLogo);
         }
         else {
             console.log('Wrong button');
@@ -167,6 +170,7 @@ function timerCountDownFunction() {
         scoreBoardText.style.zIndex = "1";
         blanketText.innerHTML = (``);
         scoreBoardText.innerHTML = ('Hits :' + hit + '<br> Misses :' + miss + '<br> Total Score :' + score);
+        scoreBoardText.appendChild(fpsLogo);
     }
 }
 
@@ -174,6 +178,7 @@ function timerCountDownFunction() {
 
 var pewPew = document.getElementById('pewPew');
 function pewSound() {
+    pewPew.volume = 0.7;
     pewPew.play();
 }
 
@@ -213,6 +218,7 @@ stopBtn.addEventListener('click', function() {
     scoreBoardText.style.zIndex = "-2";
     scoreBoardText.style.opacity = "0";
     blanketText.innerHTML = (`Stop`);
+    blanketText.appendChild(fpsLogo);
 })
 
 restartBtn.addEventListener('click', function() {
@@ -236,9 +242,10 @@ restartBtn.addEventListener('click', function() {
     countDownTimer.innerHTML = (`Timer = 20`);
     gameState = 0;
     startCounter = 3;
-    blanketText.innerHTML = (`${startCounter}`);
+    blanketText.innerHTML = ('Please Press <br> Start');
+    blanketText.appendChild(fpsLogo);
     document.querySelector('.blanket').style.zIndex = "1";
-    document.querySelector('.blanket').style.opacity = "0";
+    document.querySelector('.blanket').style.opacity = "0.8";
     scoreBoardText.style.zIndex = "-2";
     scoreBoardText.style.opacity = "0";
 })
@@ -254,6 +261,22 @@ friendlyBtn.addEventListener('click',function() {
     }
     else {
         console.log(`Friendly Button error`);
+    }
+})
+
+soundBtn.addEventListener('click',function() {
+    if (sound === 1 ) {
+        sound = 0;
+        soundBtn.textContent = ('Sound Off');
+        pewPew.muted = true;
+    }
+    else if (sound === 0 ) {
+        sound = 1;
+        soundBtn.textContent = ('Sound On');
+        pewPew.muted = false;
+    }
+    else {
+        console.log(`Sound error`);
     }
 })
 
